@@ -13,38 +13,44 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
+    public static ArrayList<User> data = ListRecyclerAdapter.data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        User user1 = new User("Owen","FI Student",1,false);
-        //Log.d(TAG, "ABCDE "+user1.name);
-
         Intent i = getIntent();
+        String uName = i.getStringExtra("name");
+        String uDesc = i.getStringExtra("description");
+        Integer pos = i.getIntExtra("position",0);
+        User user1 = new User("Owen","FI Student",1,false);
 
         TextView nameTV = findViewById(R.id.textView);
         TextView descTV = findViewById(R.id.textView2);
         Button followButton = findViewById(R.id.followBtn);
         Button messageButton = findViewById(R.id.msgBtn);
 
-        nameTV.setText(user1.name + " " + i.getIntExtra("key",0));
-        descTV.setText(user1.description);
-        if(user1.followed){
+        nameTV.setText(uName);
+        descTV.setText(uDesc);
+        if(data.get(pos).followed){
             followButton.setText("Unfollow");
         }
 
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user1.followed){
-                    user1.followed = false;
+                if (data.get(pos).followed){
+                    data.get(pos).followed = false;
                     followButton.setText("Follow");
                     Toast.makeText(MainActivity.this,"Unfollowed",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    user1.followed = true;
+                    data.get(pos).followed = true;
                     followButton.setText("Unfollow");
                     Toast.makeText(MainActivity.this,"Followed",Toast.LENGTH_SHORT).show();
                 }

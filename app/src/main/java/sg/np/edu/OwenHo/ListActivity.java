@@ -1,14 +1,22 @@
 package sg.np.edu.OwenHo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ListActivity extends AppCompatActivity {
@@ -17,34 +25,19 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        ImageView b = findViewById(R.id.imageView2);
 
-
-
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ListActivity.this);
-                builder.setTitle("Profile");
-                builder.setMessage("MADness");
-                builder.setCancelable(false);
-                builder.setPositiveButton("View", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        Random r = new Random();
-                        Intent i = new Intent(ListActivity.this,MainActivity.class);
-                        i.putExtra("key",r.nextInt());
-                        startActivity(i);
-                    }
-                });
-                builder.setNegativeButton("Close", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-
-                    }
-                });
-                builder.show();
-            }
-        });
-
+        ArrayList<User> userList = new ArrayList<User>();
+        for (int i=0;i<20;i++){
+            Random r = new Random();
+            userList.add(new User("Name"+r.nextInt(),"Description "+r.nextInt(),i,r.nextBoolean()));
+        }
+        //Log.d("OWEN","Number of users: "+userList.size());
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        ListRecyclerAdapter mAdapter = new ListRecyclerAdapter(userList);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
 
     }
 }
